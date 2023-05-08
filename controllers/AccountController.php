@@ -7,6 +7,7 @@ use app\models\AccountSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Yii;
 
 /**
  * AccountController implements the CRUD actions for Account model.
@@ -70,7 +71,13 @@ class AccountController extends Controller
         $model = new Account();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+            $model->load($this->request->post());
+
+            $model->isAdmin = 0;
+            $model->password = Yii::$app->getSecurity()->generatePasswordHash($model->password);
+            $model->authKey = Yii::$app->security->generateRandomString();
+
+            if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {

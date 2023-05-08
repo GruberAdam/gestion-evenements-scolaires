@@ -13,7 +13,7 @@ use Yii;
  * @property string $email
  * @property int $sectorId
  * @property string $authKey
- * @property int $accountTypeId
+ * @property bool $isAdmin
  * @property string $password
  *
  * @property Event[] $events
@@ -35,9 +35,10 @@ class Account extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['firstname', 'lastname', 'email', 'sectorId', 'authKey', 'accountTypeId', 'password'], 'required'],
-            [['sectorId', 'accountTypeId'], 'integer'],
-            [['firstname', 'lastname', 'email', 'authKey', 'password'], 'string', 'max' => 255],
+            [['firstname', 'lastname', 'email', 'sectorId', 'authKey', 'isAdmin', 'password'], 'required'],
+            [['sectorId', 'isAdmin'], 'integer'],
+            [['firstname', 'lastname', 'authKey', 'password'], 'string', 'max' => 255],
+            [['email'], 'email'],
             [['authKey'], 'unique'],
             [['email'], 'unique'],
             [['sectorId'], 'exist', 'skipOnError' => true, 'targetClass' => Sector::class, 'targetAttribute' => ['sectorId' => 'sectorId']],
@@ -56,7 +57,7 @@ class Account extends \yii\db\ActiveRecord
             'email' => 'Email',
             'sectorId' => 'Sector ID',
             'authKey' => 'Auth Key',
-            'accountTypeId' => 'Account Type ID',
+            'isAdmin' => 'Is Admin',
             'password' => 'Password',
         ];
     }

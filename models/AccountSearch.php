@@ -17,7 +17,7 @@ class AccountSearch extends Account
     public function rules()
     {
         return [
-            [['id', 'sectorId', 'accountTypeId'], 'integer'],
+            [['id', 'sectorId', 'isAdmin'], 'integer'],
             [['firstname', 'lastname', 'email', 'authKey', 'password'], 'safe'],
         ];
     }
@@ -60,7 +60,7 @@ class AccountSearch extends Account
         $query->andFilterWhere([
             'id' => $this->id,
             'sectorId' => $this->sectorId,
-            'accountTypeId' => $this->accountTypeId,
+            'isAdmin' => $this->isAdmin,
         ]);
 
         $query->andFilterWhere(['like', 'firstname', $this->firstname])

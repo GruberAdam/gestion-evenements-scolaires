@@ -27,7 +27,7 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'authKey') ?>
 
-    <?php // echo $form->field($model, 'accountTypeId') ?>
+    <?php // echo $form->field($model, 'isAdmin') ?>
 
     <?php // echo $form->field($model, 'password') ?>
 

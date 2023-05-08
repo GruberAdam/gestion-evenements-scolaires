@@ -10,6 +10,7 @@ $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Accounts', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
+Yii::$app->formatter->booleanFormat = ['Non', 'Oui'];
 ?>
 <div class="account-view">
 
@@ -33,9 +34,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'firstname',
             'lastname',
             'email:email',
-            'sectorId',
+            'sector.name',
             'authKey',
-            'accountTypeId',
+            'isAdmin:boolean',
             'password',
         ],
     ]) ?>

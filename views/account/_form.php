@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper;
+use app\models\Sector;
 
 /** @var yii\web\View $this */
 /** @var app\models\Account $model */
@@ -18,11 +20,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'sectorId')->textInput() ?>
-
-    <?= $form->field($model, 'authKey')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'accountTypeId')->textInput() ?>
+    <?= $form->field($model, 'sectorId')->dropDownList(ArrayHelper::map(Sector::find()->all(), 'sectorId', 'name')) ?>
 
     <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
 

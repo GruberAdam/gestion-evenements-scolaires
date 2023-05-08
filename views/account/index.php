@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'email:email',
             'sectorId',
             //'authKey',
-            //'accountTypeId',
+            //'isAdmin',
             //'password',
             [
                 'class' => ActionColumn::className(),
