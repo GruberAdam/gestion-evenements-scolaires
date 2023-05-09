@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Account;
 use Yii;
 use yii\filters\AccessControl;
 use yii\db\Exception;
@@ -9,6 +10,7 @@ use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
+use app\models\RequestNewPasswordForm;
 
 class SiteController extends Controller
 {
@@ -109,13 +111,5 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
-    /**
-     * Displays about page.
-     *
-     * @return string
-     */
-    public function actionAbout()
-    {
-        return $this->render('about');
-    }
+
 }

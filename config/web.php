@@ -2,6 +2,9 @@
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
 
 $config = [
     'id' => 'basic',
@@ -29,8 +32,13 @@ $config = [
         'mailer' => [
             'class' => \yii\symfonymailer\Mailer::class,
             'viewPath' => '@app/mail',
-            // send all mails to a file by default.
-            'useFileTransport' => true,
+            'transport' =>[
+                'scheme' => 'smtps',
+                'port' => '465',
+                'host' => 'smtp.gmail.com',
+                'username' => $_ENV['MAIL_USERNAME'],
+                'password' => $_ENV['MAIL_PASSWORD'],
+            ]
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,

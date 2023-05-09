@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Account;
 use app\models\AccountSearch;
+use app\models\RequestNewPasswordForm;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -202,6 +203,36 @@ class AccountController extends Controller
             }
         }
         return $this->render('resetPassword', ['model' => $model]);
+    }
+
+
+    public function actionForgotPassword()
+    {
+        $model = new RequestNewPasswordForm();
+
+        if ($model->load(Yii::$app->request->post())){
+
+            // Doesn't send the email, if the mail is not in the database
+            if (Account::findOne(['email' => $model->email]) == null){
+                return $this->render('mailSent', ['model' => $model, 'text' => 'Email introuvable']);
+            }
+
+            //Find right user
+            $account = new Account();
+            $account = $this->findModel(Account::findOne(['email' => $model->email])->id);
+
+            //Change password
+            $newPassword = Yii::$app->security->generateRandomString();
+            $account->password = Yii::$app->getSecurity()->generatePasswordHash($newPassword);
+            $account->save();
+
+            $message = "Voici votre nouveau mot de passe : ". $newPassword ."  Vous pouvez le changer une fois connecté sur votre compte, dans l onglet 'Mon Profil'";
+            Yii::$app->mailer->compose()->setFrom('itzfrzeitzfrozen@gmail.com')->setTo($model->email)->setSubject('Nouveau mot de passe')->setTextBody('Tamere')
+                ->setHtmlBody($message)->send();
+            return $this->render('mailSent', ['model' => $model, 'text' => 'Un email à été envoyé à ']);
+        }
+
+        return $this->render('requestNewPassword', ['model' => $model]);
     }
 
 

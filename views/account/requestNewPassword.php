@@ -2,12 +2,11 @@
 
 /** @var yii\web\View $this */
 /** @var yii\bootstrap5\ActiveForm $form */
-/** @var app\models\LoginForm $model */
 
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
 
-$this->title = 'Login';
+$this->title = 'Request new password';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-login">
@@ -24,23 +23,9 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
-        <?= $form->field($model, 'email')->textInput(['autofocus' => true]) ?>
+    <?= $form->field($model, 'email')->textInput(['autofocus' => true]) ?>
 
-        <?= $form->field($model, 'password')->passwordInput() ?>
-
-
-        <div class="form-group">
-            <div class="offset-lg-1 col-lg-11">
-                <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
-                <br><br>
-                <?= Html::a('Mot de passe oublié ?', ['account/forgot-password'], [
-                    'class' => 'btn btn-danger',
-                ]) ?>
-            </div>
-
-        </div>
-
-
+    <?= Html::submitButton('Envoyer un mail', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
 
     <?php ActiveForm::end(); ?>
 </div>
