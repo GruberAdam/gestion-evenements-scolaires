@@ -9,6 +9,7 @@ use yii\bootstrap5\Breadcrumbs;
 use yii\bootstrap5\Html;
 use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
+use yii\helpers\Url;
 
 AppAsset::register($this);
 
@@ -42,6 +43,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     if (Yii::$app->user->isGuest){
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else if (Yii::$app->session->get('isAdmin')){
+        $menuItems[] = ['label' => 'Mon Profil', 'url' => Url::to(['account/view', 'id' => Yii::$app->user->id, 'personal' => '1'])];
         $menuItems[] = ['label' => 'Comptes', 'url' => ['/account/index']];
         $menuItems[] = ['label' => 'Fillières', 'url' => ['/sector/index']];
         $menuItems[] = [
@@ -50,6 +52,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             'linkOptions' => ['data-method' => 'post']
         ];
     } else {
+        $menuItems[] = ['label' => 'Mon Profil', 'url' => Url::to(['account/view', 'id' => Yii::$app->user->id])];
         $menuItems[] = ['label' => 'Evènements', 'url' => ['/material/index']];
         $menuItems[] = [
             'label' => 'Logout (' . Yii::$app->user->identity->email . ')',

@@ -8,6 +8,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use Yii;
+use app\models\ResetPasswordForm;
+use yii\db\Exception;
 
 /**
  * AccountController implements the CRUD actions for Account model.
@@ -60,12 +62,24 @@ class AccountController extends Controller
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView($id, $personal = 0)
     {
         if (!Yii::$app->session->get('isAdmin')) {
-            $name = "Permissions";
-            $message = "Vous n'êtes pas authorisé sur cette page";
-            return $this->render('error', ['name' => $name, 'message' => $message]);
+            if ($id == Yii::$app->user->id){
+                return $this->render('personalView', [
+                    'model' => $this->findModel($id),
+                ]);
+
+            }else{
+                $name = "Permissions";
+                $message = "Vous n'êtes pas authorisé sur cette page";
+                return $this->render('error', ['name' => $name, 'message' => $message]);
+            }
+        }
+        if ($personal == 1){
+            return $this->render('personalView', [
+                'model' => $this->findModel($id),
+            ]);
         }
 
         return $this->render('view', [
@@ -114,17 +128,34 @@ class AccountController extends Controller
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate($id, $personal = 0)
     {
         if (!Yii::$app->session->get('isAdmin')) {
-            $name = "Permissions";
-            $message = "Vous n'êtes pas authorisé sur cette page";
-            return $this->render('error', ['name' => $name, 'message' => $message]);
+            if ($id == Yii::$app->user->id){
+                $model = $this->findModel($id);
+                if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+                return $this->render('personalUpdate', [
+                    'model' => $model,
+                ]);
+            }else{
+                $name = "Permissions";
+                $message = "Vous n'êtes pas authorisé sur cette page";
+                return $this->render('error', ['name' => $name, 'message' => $message]);
+            }
         }
         $model = $this->findModel($id);
 
+        // This part is for admins
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        if ($personal == 1){
+            return $this->render('personalUpdate', [
+                'model' => $model,
+            ]);
         }
 
         return $this->render('update', [
@@ -151,6 +182,28 @@ class AccountController extends Controller
 
         return $this->redirect(['index']);
     }
+
+    public function actionResetPassword()
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
+        $model = new ResetPasswordForm();
+        if ($model->load(Yii::$app->request->post()) && $model->resetPasswords(Yii::$app->user->id)) {
+            $account = new Account();
+
+            $account = $this->findModel(Yii::$app->user->id);
+            Yii::warning($account->password);
+            $account->password = Yii::$app->getSecurity()->generatePasswordHash($model->newPassword);
+            Yii::warning($account->password);
+            if ($account->save()) {
+                return $this->goBack();
+            }
+        }
+        return $this->render('resetPassword', ['model' => $model]);
+    }
+
 
     /**
      * Finds the Account model based on its primary key value.

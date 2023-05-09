@@ -8,6 +8,7 @@ use app\models\Sector;
 /** @var yii\web\View $this */
 /** @var app\models\Account $model */
 /** @var yii\widgets\ActiveForm $form */
+
 ?>
 
 <div class="account-form">
@@ -19,6 +20,8 @@ use app\models\Sector;
     <?= $form->field($model, 'lastname')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'sectorId')->dropDownList(ArrayHelper::map(Sector::find()->all(), 'sectorId', 'name')) ?>
 

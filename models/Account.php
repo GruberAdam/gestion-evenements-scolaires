@@ -11,6 +11,7 @@ use Yii;
  * @property string $firstname
  * @property string $lastname
  * @property string $email
+ * @property string $phone
  * @property int $sectorId
  * @property string $authKey
  * @property bool $isAdmin
@@ -37,7 +38,7 @@ class Account extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return [
             [['firstname', 'lastname', 'email', 'sectorId', 'authKey', 'isAdmin', 'password'], 'required'],
             [['sectorId', 'isAdmin'], 'integer'],
-            [['firstname', 'lastname', 'authKey', 'password'], 'string', 'max' => 255],
+            [['firstname', 'lastname', 'authKey', 'phone', 'password'], 'string', 'max' => 255],
             [['email'], 'email'],
             [['authKey'], 'unique'],
             [['email'], 'unique'],
@@ -55,6 +56,7 @@ class Account extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             'firstname' => 'Firstname',
             'lastname' => 'Lastname',
             'email' => 'Email',
+            'phone' => 'Phone',
             'sectorId' => 'Sector ID',
             'authKey' => 'Auth Key',
             'isAdmin' => 'Is Admin',
