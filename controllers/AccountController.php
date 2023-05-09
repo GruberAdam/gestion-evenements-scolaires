@@ -39,6 +39,12 @@ class AccountController extends Controller
      */
     public function actionIndex()
     {
+        if (!Yii::$app->session->get('isAdmin')) {
+            $name = "Permissions";
+            $message = "Vous n'êtes pas authorisé sur cette page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
+
         $searchModel = new AccountSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
@@ -56,6 +62,12 @@ class AccountController extends Controller
      */
     public function actionView($id)
     {
+        if (!Yii::$app->session->get('isAdmin')) {
+            $name = "Permissions";
+            $message = "Vous n'êtes pas authorisé sur cette page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
+
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -68,6 +80,12 @@ class AccountController extends Controller
      */
     public function actionCreate()
     {
+        if (!Yii::$app->session->get('isAdmin')) {
+            $name = "Permissions";
+            $message = "Vous n'êtes pas authorisé sur cette page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
+
         $model = new Account();
 
         if ($this->request->isPost) {
@@ -98,6 +116,11 @@ class AccountController extends Controller
      */
     public function actionUpdate($id)
     {
+        if (!Yii::$app->session->get('isAdmin')) {
+            $name = "Permissions";
+            $message = "Vous n'êtes pas authorisé sur cette page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
@@ -118,6 +141,12 @@ class AccountController extends Controller
      */
     public function actionDelete($id)
     {
+        if (!Yii::$app->session->get('isAdmin')) {
+            $name = "Permissions";
+            $message = "Vous n'êtes pas authorisé sur cette page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

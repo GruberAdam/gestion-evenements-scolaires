@@ -19,7 +19,7 @@ use Yii;
  * @property Event[] $events
  * @property Sector $sector
  */
-class Account extends \yii\db\ActiveRecord
+class Account extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
     /**
      * {@inheritdoc}
@@ -80,5 +80,47 @@ class Account extends \yii\db\ActiveRecord
     public function getSector()
     {
         return $this->hasOne(Sector::class, ['sectorId' => 'sectorId']);
+    }
+
+    public function isAdmin(){
+        if($this->isAdmin){
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getAuthKey()
+    {
+        return $this->authKey;
+    }
+
+    public function getId(){
+        return $this->id;
+    }
+
+    public function validateAuthKey($authKey)
+    {
+        return $this->authKey === $authKey;
+    }
+
+    public static function findIdentity($id)
+    {
+        return self::findOne($id);
+    }
+
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        throw new \yii\base\NotSupportedException();
+    }
+
+    public static function findByEmail($email)
+    {
+        return self::findOne(['email' => $email]);
+    }
+
+    public function validatePassword($password)
+    {
+        return $this->password === $password;
     }
 }

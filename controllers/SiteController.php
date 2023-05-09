@@ -4,11 +4,11 @@ namespace app\controllers;
 
 use Yii;
 use yii\filters\AccessControl;
+use yii\db\Exception;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
-use app\models\ContactForm;
 
 class SiteController extends Controller
 {
@@ -76,9 +76,20 @@ class SiteController extends Controller
         }
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+
+        try{
+            if ($model->load(Yii::$app->request->post()) && $model->login()) {
+                $session = Yii::$app->session;
+                $session->set('isAdmin', Yii::$app->user->identity->isAdmin());
+                return $this->goBack();
+            }
+        } catch (Exception $e){
+            $name = "Database";
+            $message = $e->getMessage();
+            Yii::warning($message);
+            return $this->render('error', ['name' => $name, 'message' => $message]);
         }
+
 
         $model->password = '';
         return $this->render('login', [

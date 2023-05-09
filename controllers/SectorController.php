@@ -7,6 +7,7 @@ use app\models\SectorSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Yii;
 
 /**
  * SectorController implements the CRUD actions for Sector model.
@@ -38,6 +39,12 @@ class SectorController extends Controller
      */
     public function actionIndex()
     {
+        if (!Yii::$app->session->get('isAdmin')) {
+            $name = "Permissions";
+            $message = "Vous n'êtes pas authorisé sur cette page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
+
         $searchModel = new SectorSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
@@ -55,6 +62,12 @@ class SectorController extends Controller
      */
     public function actionView($sectorId)
     {
+        if (!Yii::$app->session->get('isAdmin')) {
+            $name = "Permissions";
+            $message = "Vous n'êtes pas authorisé sur cette page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
+
         return $this->render('view', [
             'model' => $this->findModel($sectorId),
         ]);
@@ -67,6 +80,12 @@ class SectorController extends Controller
      */
     public function actionCreate()
     {
+        if (!Yii::$app->session->get('isAdmin')) {
+            $name = "Permissions";
+            $message = "Vous n'êtes pas authorisé sur cette page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
+
         $model = new Sector();
 
         if ($this->request->isPost) {
@@ -91,6 +110,12 @@ class SectorController extends Controller
      */
     public function actionUpdate($sectorId)
     {
+        if (!Yii::$app->session->get('isAdmin')) {
+            $name = "Permissions";
+            $message = "Vous n'êtes pas authorisé sur cette page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
+
         $model = $this->findModel($sectorId);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
@@ -111,6 +136,12 @@ class SectorController extends Controller
      */
     public function actionDelete($sectorId)
     {
+        if (!Yii::$app->session->get('isAdmin')) {
+            $name = "Permissions";
+            $message = "Vous n'êtes pas authorisé sur cette page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
+
         $this->findModel($sectorId)->delete();
 
         return $this->redirect(['index']);
