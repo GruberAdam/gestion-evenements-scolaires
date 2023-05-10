@@ -41,10 +41,14 @@ Yii::$app->name = "Gestion d'évènements"
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
     ];
+
     if (Yii::$app->user->isGuest){
+        //For guests
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else if (Yii::$app->session->get('isAdmin')){
+        //For admins
         $menuItems[] = ['label' => 'Mon Profil', 'url' => Url::to(['account/view', 'id' => Yii::$app->user->id, 'personal' => '1'])];
+        $menuItems[] = ['label' => 'Evènements', 'url' => ['/event/index']];
         $menuItems[] = ['label' => 'Comptes', 'url' => ['/account/index']];
         $menuItems[] = ['label' => 'Fillières', 'url' => ['/sector/index']];
         $menuItems[] = [
@@ -53,8 +57,9 @@ Yii::$app->name = "Gestion d'évènements"
             'linkOptions' => ['data-method' => 'post']
         ];
     } else {
+        //For users
         $menuItems[] = ['label' => 'Mon Profil', 'url' => Url::to(['account/view', 'id' => Yii::$app->user->id])];
-        $menuItems[] = ['label' => 'Evènements', 'url' => ['/material/index']];
+        $menuItems[] = ['label' => 'Evènements', 'url' => ['/event/index']];
         $menuItems[] = [
             'label' => 'Logout (' . Yii::$app->user->identity->email . ')',
             'url' => ['/site/logout'],

@@ -131,6 +131,7 @@ class AccountController extends Controller
      */
     public function actionUpdate($id, $personal = 0)
     {
+        //If not admin, can still change his own profile
         if (!Yii::$app->session->get('isAdmin')) {
             if ($id == Yii::$app->user->id){
                 $model = $this->findModel($id);
@@ -146,17 +147,22 @@ class AccountController extends Controller
                 return $this->render('error', ['name' => $name, 'message' => $message]);
             }
         }
+
         $model = $this->findModel($id);
 
-        // This part is for admins
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
+        // Checks if he is in personal profile
         if ($personal == 1){
+            if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id, 'personal' => 1]);
+            }
             return $this->render('personalUpdate', [
                 'model' => $model,
             ]);
+        }
+
+
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
@@ -195,9 +201,8 @@ class AccountController extends Controller
             $account = new Account();
 
             $account = $this->findModel(Yii::$app->user->id);
-            Yii::warning($account->password);
             $account->password = Yii::$app->getSecurity()->generatePasswordHash($model->newPassword);
-            Yii::warning($account->password);
+
             if ($account->save()) {
                 return $this->goBack();
             }
@@ -226,10 +231,11 @@ class AccountController extends Controller
             $account->password = Yii::$app->getSecurity()->generatePasswordHash($newPassword);
             $account->save();
 
+            //Sends mail
             $message = "Voici votre nouveau mot de passe : ". $newPassword ."  Vous pouvez le changer une fois connecté sur votre compte, dans l onglet 'Mon Profil'";
             Yii::$app->mailer->compose()->setFrom('itzfrzeitzfrozen@gmail.com')->setTo($model->email)->setSubject('Nouveau mot de passe')->setTextBody('Tamere')
                 ->setHtmlBody($message)->send();
-            return $this->render('mailSent', ['model' => $model, 'text' => 'Un email à été envoyé à ']);
+            return $this->render('mailSent', ['model' => $model, 'text' => "Un email a été envoyé à l'adresse entrée"]);
         }
 
         return $this->render('requestNewPassword', ['model' => $model]);
