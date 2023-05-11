@@ -70,10 +70,7 @@ function initMap() {
     function setupClickListener(id, types) {
         const radioButton = document.getElementById(id);
 
-        radioButton.addEventListener("click", () => {
-            autocomplete.setTypes(types);
-            input.value = "";
-        });
+
     }
 
     setupClickListener("changetype-all", []);
@@ -82,32 +79,8 @@ function initMap() {
     setupClickListener("changetype-geocode", ["geocode"]);
     setupClickListener("changetype-cities", ["(cities)"]);
     setupClickListener("changetype-regions", ["(regions)"]);
-    biasInputElement.addEventListener("change", () => {
-        if (biasInputElement.checked) {
-            autocomplete.bindTo("bounds", map);
-        } else {
-            // User wants to turn off location bias, so three things need to happen:
-            // 1. Unbind from map
-            // 2. Reset the bounds to whole world
-            // 3. Uncheck the strict bounds checkbox UI (which also disables strict bounds)
-            autocomplete.unbind("bounds");
-            autocomplete.setBounds({ east: 180, west: -180, north: 90, south: -90 });
-            strictBoundsInputElement.checked = biasInputElement.checked;
-        }
 
-        input.value = "";
-    });
-    strictBoundsInputElement.addEventListener("change", () => {
-        autocomplete.setOptions({
-            strictBounds: strictBoundsInputElement.checked,
-        });
-        if (strictBoundsInputElement.checked) {
-            biasInputElement.checked = strictBoundsInputElement.checked;
-            autocomplete.bindTo("bounds", map);
-        }
 
-        input.value = "";
-    });
 }
 
 window.initMap = initMap;

@@ -10,7 +10,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Events', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 
-$this->registerJsFile( 'js/maps.js', ['depends' => [\yii\web\JqueryAsset::class]]);
+$this->registerJsFile( 'js/inputAutocompleter.js', ['depends' => [\yii\web\JqueryAsset::class]]);
 ?>
 
 <div class="event-create">

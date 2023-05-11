@@ -10,7 +10,12 @@ $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Events', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
+
+$this->registerJsFile( 'js/map.js', ['depends' => [\yii\web\JqueryAsset::class]]);
 ?>
+<script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg"></script>
+
+
 <div class="event-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
@@ -62,5 +67,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 }],
         ],
     ]) ?>
+    <br><br>
+    <h5 id="address"><?= $model->location->address?></h5>
+    <div id="map" style="width:100%;height:300px;"></div>
+    <script>
 
+    </script>
 </div>
+
+
+
+

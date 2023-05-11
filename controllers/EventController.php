@@ -8,6 +8,7 @@ use app\models\Location;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Yii;
 
 /**
  * EventController implements the CRUD actions for Event model.
@@ -39,6 +40,12 @@ class EventController extends Controller
      */
     public function actionIndex()
     {
+        if (!Yii::$app->session->get('isAdmin')) {
+            $name = "Permissions";
+            $message = "Vous n'êtes pas authorisé sur cette page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
+
         $searchModel = new EventSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
