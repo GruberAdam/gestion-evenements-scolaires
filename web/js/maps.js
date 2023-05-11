@@ -8,7 +8,7 @@ function initMap() {
         mapTypeControl: false,
     });
     const card = document.getElementById("pac-card");
-    const input = document.getElementById("locationId");
+    const input = document.getElementById("pac-input");
     const biasInputElement = document.getElementById("use-location-bias");
     const strictBoundsInputElement = document.getElementById("use-strict-bounds");
     const options = {

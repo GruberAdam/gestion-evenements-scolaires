@@ -30,9 +30,36 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'title',
-            'locationId',
-            'accountId',
+            [
+                    'attribute' => "Titre De l'évènement",
+                'value' => function ($data)
+                {
+                    return $data->title;
+                }],
+            [
+                'attribute' => "Lieu",
+                'value' => function ($data)
+                {
+                    return $data->location->title;
+                }],
+            [
+                'attribute' => "Adresse",
+                'value' => function ($data)
+                {
+                    return $data->location->address;
+                }],
+            [
+                'attribute' => "Responsable",
+                'value' => function ($data)
+                {
+                    return $data->account->email;
+                }],
+            [
+                'attribute' => "Téléphone du responsable",
+                'value' => function ($data)
+                {
+                    return $data->account->phone;
+                }],
         ],
     ]) ?>
 

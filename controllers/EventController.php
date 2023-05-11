@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Event;
 use app\models\EventSearch;
+use app\models\Location;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -70,8 +71,21 @@ class EventController extends Controller
         $model = new Event();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+            $model->load($this->request->post());
+
+            $location = new Location();
+
+            $location->address = $model->locationInput;
+            $location->title = $model->titleLocationInput;
+            $location->save();
+
+            $model->locationId = $location->locationId;
+
+            if ($model->save() && $location->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
+            }else{
+                \Yii::warning($model->getErrors());
+                \Yii::warning($location->getErrors());
             }
         } else {
             $model->loadDefaultValues();

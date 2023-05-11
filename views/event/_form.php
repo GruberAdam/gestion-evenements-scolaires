@@ -2,27 +2,31 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper;
+use app\models\Account;
 
 /** @var yii\web\View $this */
 /** @var app\models\Event $model */
 /** @var yii\widgets\ActiveForm $form */
 
-$this->registerJsFile( 'js/maps.js', ['depends' => [\yii\web\JqueryAsset::class]]);
 ?>
 <div class="event-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'title')->textInput(['maxlength' => true])->label("Titre de l'évènement") ?>
 
-    <?= $form->field($model, 'locationId')->textInput() ?>
+    <?= $form->field($model, 'titleLocationInput')->textInput(['maxlength' => true])->label("Titre du lieu") ?>
+
+    <?= $form->field($model, 'locationInput', ['inputOptions' => ['id' => 'pac-input']])->textInput(['class' => 'form-control punjabi'])->label('Adresse') ?>
     <div id="map"></div>
     <div id="infowindow-content">
         <span id="place-name" class="title"></span><br />
         <span id="place-address"></span>
     </div>
 
-    <?= $form->field($model, 'accountId')->textInput() ?>
+    <?= $form->field($model, 'accountId')->dropDownList(ArrayHelper::map(Account::find()->all(), 'id', 'email'))->label("Responsable de l'évènement") ?>
+
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
@@ -33,8 +37,3 @@ $this->registerJsFile( 'js/maps.js', ['depends' => [\yii\web\JqueryAsset::class]
 
 
 </div>
-
-<script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&libraries=places&v=weekly"
-        defer
-></script>

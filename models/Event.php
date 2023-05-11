@@ -10,6 +10,7 @@ use Yii;
  * @property int $id
  * @property string $title
  * @property int $locationId
+ * @property int $locationInput
  * @property int $accountId
  *
  * @property Account $account
@@ -18,6 +19,8 @@ use Yii;
  */
 class Event extends \yii\db\ActiveRecord
 {
+    public $locationInput;
+    public $titleLocationInput;
     /**
      * {@inheritdoc}
      */
@@ -32,9 +35,9 @@ class Event extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'locationId', 'accountId'], 'required'],
+            [['title', 'locationId', 'accountId', 'locationInput', 'titleLocationInput'], 'required'],
             [['locationId', 'accountId'], 'integer'],
-            [['title'], 'string', 'max' => 255],
+            [['title', 'locationInput', 'titleLocationInput'], 'string', 'max' => 255],
             [['accountId'], 'exist', 'skipOnError' => true, 'targetClass' => Account::class, 'targetAttribute' => ['accountId' => 'id']],
             [['locationId'], 'exist', 'skipOnError' => true, 'targetClass' => Location::class, 'targetAttribute' => ['locationId' => 'locationId']],
         ];
@@ -49,6 +52,7 @@ class Event extends \yii\db\ActiveRecord
             'id' => 'ID',
             'title' => 'Title',
             'locationId' => 'Location ID',
+            'locationInput' => 'input',
             'accountId' => 'Account ID',
         ];
     }
