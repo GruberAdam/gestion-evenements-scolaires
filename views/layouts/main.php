@@ -59,7 +59,7 @@ Yii::$app->name = "Gestion d'évènements"
     } else {
         //For users
         $menuItems[] = ['label' => 'Mon Profil', 'url' => Url::to(['account/view', 'id' => Yii::$app->user->id])];
-        $menuItems[] = ['label' => 'Evènements', 'url' => ['/event/index']];
+        $menuItems[] = ['label' => 'Créer des évènements', 'url' => ['/event/create']];
         $menuItems[] = [
             'label' => 'Logout (' . Yii::$app->user->identity->email . ')',
             'url' => ['/site/logout'],
