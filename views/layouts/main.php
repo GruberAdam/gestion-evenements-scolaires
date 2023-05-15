@@ -49,6 +49,7 @@ Yii::$app->name = "Gestion d'évènements"
         //For admins
         $menuItems[] = ['label' => 'Mon Profil', 'url' => Url::to(['account/view', 'id' => Yii::$app->user->id, 'personal' => '1'])];
         $menuItems[] = ['label' => 'Evènements', 'url' => ['/event/index']];
+        $menuItems[] = ['label' => 'Tranches horaires', 'url' => ['/time-slot/index']];
         $menuItems[] = ['label' => 'Comptes', 'url' => ['/account/index']];
         $menuItems[] = ['label' => 'Fillières', 'url' => ['/sector/index']];
         $menuItems[] = [
