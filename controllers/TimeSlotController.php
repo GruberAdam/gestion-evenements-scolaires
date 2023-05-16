@@ -7,6 +7,7 @@ use app\models\TimeSlotSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Yii;
 
 /**
  * TimeSlotController implements the CRUD actions for TimeSlot model.
@@ -38,6 +39,11 @@ class TimeSlotController extends Controller
      */
     public function actionIndex()
     {
+        if (!Yii::$app->session->get('isAdmin')) {
+            $name = "Permissions";
+            $message = "Vous n'êtes pas authorisé sur cette page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
         $searchModel = new TimeSlotSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
@@ -67,13 +73,17 @@ class TimeSlotController extends Controller
      */
     public function actionCreate()
     {
+        if (Yii::$app->user->isGuest){
+            $name = "Permissions";
+            $message = "Vous n'êtes pas authorisé sur cette page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
         $model = new TimeSlot();
 
         if ($this->request->isPost) {
             $model->load($this->request->post());
 
             if ($model->save()) {
-                \Yii::warning($model->errors);
                 return $this->redirect(['view', 'timeSlotId' => $model->timeSlotId]);
             }
 
@@ -95,6 +105,11 @@ class TimeSlotController extends Controller
      */
     public function actionUpdate($timeSlotId)
     {
+        if (Yii::$app->user->isGuest){
+            $name = "Permissions";
+            $message = "Vous n'êtes pas authorisé sur cette page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
         $model = $this->findModel($timeSlotId);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
@@ -115,6 +130,11 @@ class TimeSlotController extends Controller
      */
     public function actionDelete($timeSlotId)
     {
+        if (Yii::$app->user->isGuest){
+            $name = "Permissions";
+            $message = "Vous n'êtes pas authorisé sur cette page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
         $this->findModel($timeSlotId)->delete();
 
         return $this->redirect(['index']);
