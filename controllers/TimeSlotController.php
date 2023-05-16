@@ -70,9 +70,13 @@ class TimeSlotController extends Controller
         $model = new TimeSlot();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+            $model->load($this->request->post());
+
+            if ($model->save()) {
+                \Yii::warning($model->errors);
                 return $this->redirect(['view', 'timeSlotId' => $model->timeSlotId]);
             }
+
         } else {
             $model->loadDefaultValues();
         }

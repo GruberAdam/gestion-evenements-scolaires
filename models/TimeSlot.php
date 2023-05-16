@@ -35,8 +35,13 @@ class TimeSlot extends \yii\db\ActiveRecord
             [['date', 'startTime', 'endTime', 'eventId'], 'required'],
             [['date', 'startTime', 'endTime'], 'safe'],
             [['eventId'], 'integer'],
+            ['startTime', 'validateTime'],
             [['eventId'], 'exist', 'skipOnError' => true, 'targetClass' => Event::class, 'targetAttribute' => ['eventId' => 'id']],
         ];
+    }
+
+    public function validateTime($attribute, $params){
+        if ($this->startTime > $this->endTime) $this->addError('startTime', "Les horaires sont incohérentes");
     }
 
     /**

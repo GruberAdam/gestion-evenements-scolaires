@@ -15,7 +15,10 @@ Yii::$app->assetManager->bundles['yii\web\JqueryAsset'] = [
 <?= \yii2fullcalendar\yii2fullcalendar::widget(array(
     'events'=> $events,
     'themeSystem' => "",
-    'contentHeight' => 700
+    'contentHeight' => 700,
+    'options' => [
+        'lang' => 'fr',
+    ]
 
 ));
 ?>
