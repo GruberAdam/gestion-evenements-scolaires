@@ -16,12 +16,12 @@ use yii\helpers\ArrayHelper;
     <?= $form->field($model, 'eventId')->dropDownList(ArrayHelper::map(\app\models\Event::find()->all(), 'id', 'title'))->label("Evènement") ?>
 
 
-    <?= $form->field($model, 'date')->widget(\yii\jui\DatePicker::class, ['options' => ['class' => 'form-control'], 'dateFormat' => 'yyyy-MM-dd 00:00:00'])->label("Date de l'évènement")->textInput(['readonly' => true]) ?>
+    <?= $form->field($model, 'date')->widget(\yii\jui\DatePicker::class, ['options' => ['class' => 'form-control'], 'dateFormat' => 'yyyy-MM-dd'])->label("Date de l'évènement")->textInput(['readonly' => true]) ?>
 
 
-    <?php echo $form->field($model, 'startTime')->widget(janisto\timepicker\TimePicker::class, ['mode' => 'time', 'clientOptions' => ['timeFormat' => 'HH:mm:ss', 'showSecond' => false]])->textInput(['readonly' => true])->label("Début de l'évènement")?>
+    <?php echo $form->field($model, 'startTime')->widget(janisto\timepicker\TimePicker::class, ['mode' => 'time', 'clientOptions' => ['timeFormat' => 'HH:mm', 'showSecond' => false]])->textInput(['readonly' => true])->label("Début de l'évènement")?>
 
-    <?php echo $form->field($model, 'endTime')->widget(janisto\timepicker\TimePicker::class, ['mode' => 'time', 'clientOptions' => ['timeFormat' => 'HH:mm:ss', 'showSecond' => false]])->textInput(['readonly' => true])->label("Fin de l'évènement")?>
+    <?php echo $form->field($model, 'endTime')->widget(janisto\timepicker\TimePicker::class, ['mode' => 'time', 'clientOptions' => ['timeFormat' => 'HH:mm', 'showSecond' => false, 'onClose' => new \yii\web\JsExpression('function(dateText, inst) { console.log("onSelect: " + dateText); }'),]])->textInput(['readonly' => true])->label("Fin de l'évènement")?>
     
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

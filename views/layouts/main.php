@@ -47,7 +47,7 @@ Yii::$app->name = "Gestion d'évènements"
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else if (Yii::$app->session->get('isAdmin')){
         //For admins
-        $menuItems[] = ['label' => 'Mon Profil', 'url' => Url::to(['account/view', 'id' => Yii::$app->user->id, 'personal' => '1'])];
+        $menuItems[] = ['label' => 'Mon Profil', 'url' => Url::to(['account/view', 'id' => Yii::$app->user->id, 'personal' => '1']), 'active' => Yii::$app->request->getUrl() == Url::to(['account/view', 'id' => Yii::$app->user->id, 'personal' => '1'])];
         $menuItems[] = ['label' => 'Evènements', 'url' => ['/event/index']];
         $menuItems[] = ['label' => 'Tranches horaires', 'url' => ['/time-slot/index']];
         $menuItems[] = ['label' => 'Comptes', 'url' => ['/account/index']];
@@ -59,9 +59,9 @@ Yii::$app->name = "Gestion d'évènements"
         ];
     } else {
         //For users
-        $menuItems[] = ['label' => 'Mon Profil', 'url' => Url::to(['account/view', 'id' => Yii::$app->user->id])];
+        $menuItems[] = ['label' => 'Mon Profil', 'url' => Url::to(['account/view', 'id' => Yii::$app->user->id]), 'active' => Yii::$app->request->getUrl() == Url::to(['account/view', 'id' => Yii::$app->user->id])];
         $menuItems[] = ['label' => 'Créer des évènements', 'url' => ['/event/create']];
-        $menuItems[] = ['label' => 'Tranches horaires', 'url' => ['/time-slot/index']];
+        $menuItems[] = ['label' => 'Créer des horaires', 'url' => ['/time-slot/create']];
         $menuItems[] = ['label' => 'Calendrier', 'url' => ['/registration/calendar']];
         $menuItems[] = [
             'label' => 'Logout (' . Yii::$app->user->identity->email . ')',
