@@ -5,7 +5,7 @@ use Yii\web\Request;
 /** @var yii\web\View $this */
 /** @var app\models\Event $model */
 
-$this->title = 'Create Event';
+$this->title = 'Crée un évènement';
 $this->params['breadcrumbs'][] = ['label' => 'Events', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -22,7 +22,6 @@ $this->registerJsFile( 'js/inputAutocompleter.js', ['depends' => [\yii\web\Jquer
     ]) ?>
 
 </div>
-
 <script
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&libraries=places&v=weekly"
         defer

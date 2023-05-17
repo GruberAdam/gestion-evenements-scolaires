@@ -35,7 +35,8 @@ class Event extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'locationId', 'accountId', 'locationInput', 'titleLocationInput'], 'required'],
+            [['title', 'locationId', 'accountId', 'locationInput', 'titleLocationInput'],
+                'required', 'message' => Yii::t('app','Ce champ ne peut pas rester vide' )],
             [['locationId', 'accountId'], 'integer'],
             [['title', 'locationInput', 'titleLocationInput'], 'string', 'max' => 255],
             [['accountId'], 'exist', 'skipOnError' => true, 'targetClass' => Account::class, 'targetAttribute' => ['accountId' => 'id']],

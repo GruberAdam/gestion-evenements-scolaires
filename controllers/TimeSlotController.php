@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\models\Event;
+use app\models\EventSearch;
 use app\models\TimeSlot;
 use app\models\TimeSlotSearch;
 use yii\web\Controller;
@@ -138,6 +140,26 @@ class TimeSlotController extends Controller
         $this->findModel($timeSlotId)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionMyEvents($id)
+    {
+        $searchModel = new TimeSlotSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        $events = Event::findAll(['accountId' => $id]);
+        $timeSlots = array();
+        foreach ($events as $event){
+            Yii::warning($timeSlots);
+            $values = TimeSlot::findAll(['timeSlotId' => $event->id]);
+            Yii::warning($values);
+            array_push($timeSlots,$values);
+        }
+        Yii::warning($timeSlots);
+        return $this->render('myEvents', [
+            'searchModel' => $searchModel,
+            'timeSlots' => $timeSlots,
+        ]);
     }
 
     /**

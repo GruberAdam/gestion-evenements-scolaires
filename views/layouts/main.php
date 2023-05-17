@@ -62,6 +62,7 @@ Yii::$app->name = "Gestion d'évènements"
         $menuItems[] = ['label' => 'Mon Profil', 'url' => Url::to(['account/view', 'id' => Yii::$app->user->id]), 'active' => Yii::$app->request->getUrl() == Url::to(['account/view', 'id' => Yii::$app->user->id])];
         $menuItems[] = ['label' => 'Créer des évènements', 'url' => ['/event/create']];
         $menuItems[] = ['label' => 'Créer des horaires', 'url' => ['/time-slot/create']];
+        $menuItems[] = ['label' => 'Mes évènements', 'url' => Url::to(['time-slot/my-events', 'id' => Yii::$app->user->id])];
         $menuItems[] = ['label' => 'Calendrier', 'url' => ['/registration/calendar']];
         $menuItems[] = [
             'label' => 'Logout (' . Yii::$app->user->identity->email . ')',

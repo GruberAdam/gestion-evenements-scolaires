@@ -39,9 +39,9 @@ class Account extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             [['firstname', 'lastname', 'email', 'sectorId', 'authKey', 'isAdmin', 'password'], 'required'],
             [['sectorId', 'isAdmin'], 'integer'],
             [['firstname', 'lastname', 'authKey', 'phone', 'password'], 'string', 'max' => 255],
-            [['email'], 'email'],
+            [['email'], 'email', 'message' => Yii::t("app","Merci d'entrer une adresse email valide")],
             [['authKey'], 'unique'],
-            [['email'], 'unique'],
+            [['email'], 'unique', 'message' => Yii::t("app", "L'adresse email est déjà utilisée")],
             [['sectorId'], 'exist', 'skipOnError' => true, 'targetClass' => Sector::class, 'targetAttribute' => ['sectorId' => 'sectorId']],
         ];
     }
