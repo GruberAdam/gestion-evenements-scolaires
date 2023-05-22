@@ -10,7 +10,9 @@ $this->title = $model->timeSlotId;
 $this->params['breadcrumbs'][] = ['label' => 'Time Slots', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
+$this->registerJsFile( 'js/map.js', ['depends' => [\yii\web\JqueryAsset::class]]);
 ?>
+<script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg"></script>
 <div class="time-slot-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
@@ -30,11 +32,39 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'timeSlotId',
-            'date',
-            'startTime',
-            'endTime',
-            'eventId',
+            [
+                'attribute' => "Nom d'évènement",
+                'value' => function ($data)
+                {
+                    return $data->event->title;
+                }],
+            [
+                'attribute' => "Lieu",
+                'value' => function ($data)
+                {
+                    return $data->event->location->title;
+                }],
+            [
+                'attribute' => "Adresse",
+                'value' => function ($data)
+                {
+                    return $data->event->location->address;
+                }],
+            [
+                'attribute' => "date",
+                'value' => function ($data)
+                {
+                    return str_replace("00:00:00", "", $data->date);
+                }],
+            [
+                'attribute' => "Horaire",
+                'value' => function ($data)
+                {
+                    return str_replace(":00", "", "$data->startTime"). "h à " . str_replace(":00", "", "$data->endTime"). "h";
+                }],
         ],
     ]) ?>
+    <h5 id="address"><?= $model->event->location->address?></h5>
+    <div id="map" style="width:100%;height:350px;"></div>
 
 </div>

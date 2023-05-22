@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Event;
+use app\models\Location;
 use app\models\EventSearch;
 use app\models\TimeSlot;
 use app\models\TimeSlotSearch;
@@ -88,7 +89,6 @@ class TimeSlotController extends Controller
             if ($model->save()) {
                 return $this->redirect(['view', 'timeSlotId' => $model->timeSlotId]);
             }
-
         } else {
             $model->loadDefaultValues();
         }
@@ -105,7 +105,7 @@ class TimeSlotController extends Controller
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($timeSlotId)
+    public function actionUpdate($timeSlotId, $personal = 0)
     {
         if (Yii::$app->user->isGuest){
             $name = "Permissions";
@@ -114,14 +114,31 @@ class TimeSlotController extends Controller
         }
         $model = $this->findModel($timeSlotId);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'timeSlotId' => $model->timeSlotId]);
+        if (Yii::$app->session->get('isAdmin')) {
+            if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'timeSlotId' => $model->timeSlotId]);
+            }
+            return $this->render('update', [
+                'model' => $model,
+            ]);
         }
+        if ($this->request->isPost) {
+            $model->load($this->request->post());
+            $location = Location::findOne(['locationId' => $model->event->locationId]);
 
-        return $this->render('update', [
+            $location->address = $model->locationInput;
+            $location->title = $model->titleLocationInput;
+            $location->update();
+
+            if ($model->save()){
+                return $this->redirect(['view', 'timeSlotId' => $model->timeSlotId]);
+            }
+        }
+        return $this->render('myEventsUpdate', [
             'model' => $model,
         ]);
     }
+
 
     /**
      * Deletes an existing TimeSlot model.
@@ -148,17 +165,17 @@ class TimeSlotController extends Controller
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         $events = Event::findAll(['accountId' => $id]);
-        $timeSlots = array();
+
+        $eventIds = [];
         foreach ($events as $event){
-            Yii::warning($timeSlots);
-            $values = TimeSlot::findAll(['timeSlotId' => $event->id]);
-            Yii::warning($values);
-            array_push($timeSlots,$values);
+            array_push($eventIds, $event->id);
         }
-        Yii::warning($timeSlots);
+
+        $dataProvider->query->where(['in', 'eventId', $eventIds]);
+
         return $this->render('myEvents', [
             'searchModel' => $searchModel,
-            'timeSlots' => $timeSlots,
+            'dataProvider' => $dataProvider,
         ]);
     }
 

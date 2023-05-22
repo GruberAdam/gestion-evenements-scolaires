@@ -9,6 +9,14 @@ use app\models\Account;
 /** @var app\models\Event $model */
 /** @var yii\widgets\ActiveForm $form */
 
+
+if (gettype($model->location) == 'NULL'){
+    $addressValue = "";
+    $locationTitleValue = "";
+}else{
+    $addressValue = $model->location->address;
+    $locationTitleValue = $model->location->title;
+}
 ?>
 <div class="event-form">
 
@@ -16,9 +24,9 @@ use app\models\Account;
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true])->label("Titre de l'évènement") ?>
 
-    <?= $form->field($model, 'titleLocationInput')->textInput(['maxlength' => true])->label("Titre du lieu") ?>
+    <?= $form->field($model, 'titleLocationInput')->textInput(['maxlength' => true, 'value' => $locationTitleValue])->label("Titre du lieu") ?>
 
-    <?= $form->field($model, 'locationInput', ['inputOptions' => ['id' => 'pac-input']])->textInput(['class' => 'form-control punjabi'])->label('Adresse') ?>
+    <?= $form->field($model, 'locationInput', ['inputOptions' => ['id' => 'pac-input']])->textInput(['class' => 'form-control punjabi', 'value' => $addressValue])->label('Adresse') ?>
     <div id="map"></div>
     <div id="infowindow-content">
         <span id="place-name" class="title"></span><br />

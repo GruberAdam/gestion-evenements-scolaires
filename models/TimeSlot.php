@@ -18,6 +18,8 @@ use Yii;
  */
 class TimeSlot extends \yii\db\ActiveRecord
 {
+    public $locationInput;
+    public $titleLocationInput;
     /**
      * {@inheritdoc}
      */
@@ -36,6 +38,7 @@ class TimeSlot extends \yii\db\ActiveRecord
             [['date', 'startTime', 'endTime'], 'safe'],
             [['eventId'], 'integer'],
             ['startTime', 'validateTime'],
+            [['locationInput', 'titleLocationInput'], 'string', 'max' => 255],
             [['eventId'], 'exist', 'skipOnError' => true, 'targetClass' => Event::class, 'targetAttribute' => ['eventId' => 'id']],
         ];
     }

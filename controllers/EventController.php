@@ -100,14 +100,10 @@ class EventController extends Controller
 
             if ($model->save() && $location->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
-            }else{
-                \Yii::warning($model->getErrors());
-                \Yii::warning($location->getErrors());
             }
         } else {
             $model->loadDefaultValues();
         }
-
         return $this->render('create', [
             'model' => $model,
         ]);
@@ -129,9 +125,20 @@ class EventController extends Controller
         }
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost){
+            $model->load($this->request->post());
+
+            $location = Location::findOne(['locationId' => $model->locationId]);
+
+            $location->address = $model->locationInput;
+            $location->title = $model->titleLocationInput;
+            $location->update();
+
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
+
 
         return $this->render('update', [
             'model' => $model,
