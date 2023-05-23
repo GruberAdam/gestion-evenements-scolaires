@@ -26,6 +26,7 @@ $this->registerJsFile( 'js/map.js', ['depends' => [\yii\web\JqueryAsset::class]]
                 'method' => 'post',
             ],
         ]) ?>
+        <?= Html::a('Ajouter des participants', ['time-slot/add-apprentice', 'id' => $model->timeSlotId], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= DetailView::widget([
@@ -62,7 +63,14 @@ $this->registerJsFile( 'js/map.js', ['depends' => [\yii\web\JqueryAsset::class]]
                 {
                     return str_replace(":00", "", "$data->startTime"). "h à " . str_replace(":00", "", "$data->endTime"). "h";
                 }],
+            [
+                'attribute' => "Nombre de participants",
+                'value' => function ($data)
+                {
+                    return \app\models\Registration::find()->where(['timeSlotId' => $data->timeSlotId])->count();
+                }],
         ],
+
     ]) ?>
     <h5 id="address"><?= $model->event->location->address?></h5>
     <div id="map" style="width:100%;height:350px;"></div>

@@ -2,11 +2,14 @@
 
 namespace app\controllers;
 
+use app\models\Apprentice;
 use app\models\Event;
 use app\models\Location;
 use app\models\EventSearch;
+use app\models\Registration;
 use app\models\TimeSlot;
 use app\models\TimeSlotSearch;
+use Codeception\Lib\Connector\Yii2\ConnectionWatcher;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -176,6 +179,31 @@ class TimeSlotController extends Controller
         return $this->render('myEvents', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionAddApprentice($id){
+        $model = $this->findModel($id);
+
+        if ($this->request->isPost){
+            $model->load($this->request->post());
+
+            # Delete all record from that slotId
+
+            Registration::deleteAll(['timeSlotId' => $id]);
+
+            if ($model->apprenticeSelected != null){
+                foreach ($model->apprenticeSelected as $apprentice){
+                    $registration = new Registration();
+                    $registration->timeSlotId = $id;
+                    $registration->apprenticeId = $apprentice;
+                    $registration->save();
+                }
+            }
+        }
+
+        return $this->render('addApprentice', [
+            'model' => $model
         ]);
     }
 
