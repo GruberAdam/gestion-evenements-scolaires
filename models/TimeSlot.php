@@ -20,6 +20,7 @@ class TimeSlot extends \yii\db\ActiveRecord
 {
     public $titleLocationInput;
     public $apprenticeSelected;
+    public $displayCalendarAccount;
     /**
      * {@inheritdoc}
      */
@@ -36,7 +37,7 @@ class TimeSlot extends \yii\db\ActiveRecord
         return [
             [['date', 'startTime', 'endTime', 'eventId'], 'required'],
             [['date', 'startTime', 'endTime'], 'safe'],
-            [['eventId', 'apprenticeSelected', 'titleLocationInput'], 'integer'],
+            [['eventId', 'apprenticeSelected', 'titleLocationInput', 'displayCalendarAccount'], 'integer'],
             ['startTime', 'validateTime'],
             [['eventId'], 'exist', 'skipOnError' => true, 'targetClass' => Event::class, 'targetAttribute' => ['eventId' => 'id']],
         ];

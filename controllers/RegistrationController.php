@@ -119,34 +119,6 @@ class RegistrationController extends Controller
         return $this->redirect(['index']);
     }
 
-    public function actionCalendar($id = null)
-    {
-        $timeSlots = TimeSlot::find()->all();
-        $events = [];
-
-        foreach ($timeSlots as $timeSlot){
-            $fullCalendarEvent = new \yii2fullcalendar\models\Event();
-
-            if ($id == null){
-                $event = Event::findOne(['id' => $timeSlot->eventId]);
-            }else{
-                $event = Event::findOne(['id' => $timeSlot->eventId, 'accountId' => $id]);
-            }
-            if (isset($event->id)){
-                $fullCalendarEvent->id = $event->id;
-                $fullCalendarEvent->title = $event->title;
-                $fullCalendarEvent->start = str_replace("00:00:00", $timeSlot->startTime, $timeSlot->date);
-                $fullCalendarEvent->end = str_replace("00:00:00", $timeSlot->endTime, $timeSlot->date);
-                $events[] = $fullCalendarEvent;
-            }
-        }
-
-        return $this->render('calendar', [
-            'accountId' => $id,
-            'events' => $events
-        ]);
-    }
-
     /**
      * Finds the Registration model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

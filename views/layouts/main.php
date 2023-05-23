@@ -64,7 +64,7 @@ Yii::$app->name = "Gestion d'évènements"
         $menuItems[] = ['label' => 'Créer des évènements', 'url' => ['/event/create']];
         $menuItems[] = ['label' => 'Créer des horaires', 'url' => ['/time-slot/create']];
         $menuItems[] = ['label' => 'Mes évènements', 'url' => Url::to(['time-slot/my-events', 'id' => Yii::$app->user->id])];
-        $menuItems[] = ['label' => 'Calendrier', 'url' => ['/registration/calendar']];
+        $menuItems[] = ['label' => 'Calendrier', 'url' => ['/time-slot/calendar']];
         $menuItems[] = [
             'label' => 'Logout (' . Yii::$app->user->identity->email . ')',
             'url' => ['/site/logout'],

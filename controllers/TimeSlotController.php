@@ -211,6 +211,54 @@ class TimeSlotController extends Controller
         ]);
     }
 
+    public function actionCalendar()
+    {
+        $model = new TimeSlot();
+        $timeSlots = TimeSlot::find()->all();
+        $events = [];
+
+        if ($this->request->isPost) {
+            $model->load($this->request->post());
+
+            $registrations = Registration::findAll(['apprenticeId' => $model->displayCalendarAccount]);
+
+            foreach ($registrations as $registration) {
+                $timeSlot = TimeSlot::findOne(['timeSlotId' => $registration->timeSlotId]);
+
+                $fullCalendarEvent = new \yii2fullcalendar\models\Event();
+                $event = Event::findOne(['id' => $timeSlot->eventId]);
+
+                if (isset($event->id)){
+                    $fullCalendarEvent->id = $event->id;
+                    $fullCalendarEvent->title = $event->title;
+                    $fullCalendarEvent->start = str_replace("00:00:00", $timeSlot->startTime, $timeSlot->date);
+                    $fullCalendarEvent->end = str_replace("00:00:00", $timeSlot->endTime, $timeSlot->date);
+                    $events[] = $fullCalendarEvent;
+                }
+            }
+
+        }else{
+            foreach ($timeSlots as $timeSlot){
+                $fullCalendarEvent = new \yii2fullcalendar\models\Event();
+
+                $event = Event::findOne(['id' => $timeSlot->eventId]);
+                if (isset($event->id)){
+                    $fullCalendarEvent->id = $event->id;
+                    $fullCalendarEvent->title = $event->title;
+                    $fullCalendarEvent->start = str_replace("00:00:00", $timeSlot->startTime, $timeSlot->date);
+                    $fullCalendarEvent->end = str_replace("00:00:00", $timeSlot->endTime, $timeSlot->date);
+                    $events[] = $fullCalendarEvent;
+                }
+            }
+        }
+
+
+        return $this->render('calendar', [
+            'model' => $model,
+            'events' => $events
+        ]);
+    }
+
     /**
      * Finds the TimeSlot model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
