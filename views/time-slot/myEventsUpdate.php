@@ -19,14 +19,7 @@ $this->registerJsFile( 'js/inputAutocompleter.js', ['depends' => [\yii\web\Jquer
 
 <?= $form->field($model, 'date')->widget(\yii\jui\DatePicker::class, ['options' => ['class' => 'form-control'], 'dateFormat' => 'yyyy-MM-dd'])->label("Date de l'évènement")->textInput(['readonly' => true]) ?>
 
-<?= $form->field($model, 'titleLocationInput')->textInput(['maxlength' => true, 'value' => $model->event->location->title])->label("Titre du lieu") ?>
-
-<?= $form->field($model, 'locationInput', ['inputOptions' => ['id' => 'pac-input']])->textInput(['class' => 'form-control punjabi', 'value' => $model->event->location->address])->label('Adresse') ?>
-<div id="map"></div>
-<div id="infowindow-content" style="height: 0px">
-    <span id="place-name" class="title"></span><br />
-    <span id="place-address"></span>
-</div>
+<?= $form->field($model, 'titleLocationInput')->dropDownList(ArrayHelper::map(\app\models\Location::find()->all(), 'locationId', 'title'),  ['options' => [$model->event->locationId => ['Selected' => true]]])->label("Titre du lieu") ?>
 
 <?php echo $form->field($model, 'startTime')->widget(janisto\timepicker\TimePicker::class, ['mode' => 'time', 'clientOptions' => ['timeFormat' => 'HH:mm', 'showSecond' => false]])->textInput(['readonly' => true, 'value' => str_replace(":00","",$model->startTime)])->label("Début de l'évènement")?>
 

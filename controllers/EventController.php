@@ -90,15 +90,11 @@ class EventController extends Controller
         if ($this->request->isPost) {
             $model->load($this->request->post());
 
-            $location = new Location();
-
-            $location->address = $model->locationInput;
-            $location->title = $model->titleLocationInput;
-            $location->save();
+            $location = Location::findOne(['locationId' => $model->titleLocationInput]);
 
             $model->locationId = $location->locationId;
 
-            if ($model->save() && $location->save()) {
+            if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -128,11 +124,9 @@ class EventController extends Controller
         if ($this->request->isPost){
             $model->load($this->request->post());
 
-            $location = Location::findOne(['locationId' => $model->locationId]);
+            $location = Location::findOne(['locationId' => $model->titleLocationInput]);
 
-            $location->address = $model->locationInput;
-            $location->title = $model->titleLocationInput;
-            $location->update();
+            $model->locationId = $location->locationId;
 
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);

@@ -18,7 +18,6 @@ use Yii;
  */
 class TimeSlot extends \yii\db\ActiveRecord
 {
-    public $locationInput;
     public $titleLocationInput;
     public $apprenticeSelected;
     /**
@@ -37,9 +36,8 @@ class TimeSlot extends \yii\db\ActiveRecord
         return [
             [['date', 'startTime', 'endTime', 'eventId'], 'required'],
             [['date', 'startTime', 'endTime'], 'safe'],
-            [['eventId', 'apprenticeSelected'], 'integer'],
+            [['eventId', 'apprenticeSelected', 'titleLocationInput'], 'integer'],
             ['startTime', 'validateTime'],
-            [['locationInput', 'titleLocationInput'], 'string', 'max' => 255],
             [['eventId'], 'exist', 'skipOnError' => true, 'targetClass' => Event::class, 'targetAttribute' => ['eventId' => 'id']],
         ];
     }

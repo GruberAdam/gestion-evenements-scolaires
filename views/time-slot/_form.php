@@ -13,7 +13,7 @@ use yii\helpers\ArrayHelper;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'eventId')->dropDownList(ArrayHelper::map(\app\models\Event::find()->all(), 'id', 'title'))->label("Evènement") ?>
+    <?= $form->field($model, 'eventId')->dropDownList(ArrayHelper::map(\app\models\Event::find()->where(['accountId' => Yii::$app->user->id])->all(), 'id', 'title'))->label("Evènement") ?>
 
 
     <?= $form->field($model, 'date')->widget(\yii\jui\DatePicker::class, ['options' => ['class' => 'form-control'], 'dateFormat' => 'yyyy-MM-dd'])->label("Date de l'évènement")->textInput(['readonly' => true]) ?>

@@ -73,6 +73,6 @@ $this->registerJsFile( 'js/map.js', ['depends' => [\yii\web\JqueryAsset::class]]
 
     ]) ?>
     <h5 id="address"><?= $model->event->location->address?></h5>
-    <div id="map" style="width:100%;height:350px;"></div>
+    <div id="map" style="width:100%;height:330px;"></div>
 
 </div>

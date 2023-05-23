@@ -52,6 +52,7 @@ Yii::$app->name = "Gestion d'évènements"
         $menuItems[] = ['label' => 'Tranches horaires', 'url' => ['/time-slot/index']];
         $menuItems[] = ['label' => 'Comptes', 'url' => ['/account/index']];
         $menuItems[] = ['label' => 'Fillières', 'url' => ['/sector/index']];
+        $menuItems[] = ['label' => 'Location', 'url' => ['/location/index']];
         $menuItems[] = [
             'label' => 'Logout (' . Yii::$app->user->identity->email . ')',
             'url' => ['/site/logout'],

@@ -127,11 +127,15 @@ class TimeSlotController extends Controller
         }
         if ($this->request->isPost) {
             $model->load($this->request->post());
-            $location = Location::findOne(['locationId' => $model->event->locationId]);
+            $location = Location::findOne(['locationId' => $model->titleLocationInput]);
+            $event = Event::findOne(['id' => $model->eventId]);
 
-            $location->address = $model->locationInput;
-            $location->title = $model->titleLocationInput;
-            $location->update();
+            $event->locationId = $location->locationId;
+
+            $event->update();
+
+            Yii::warning($model->getErrors());
+
 
             if ($model->save()){
                 return $this->redirect(['view', 'timeSlotId' => $model->timeSlotId]);
