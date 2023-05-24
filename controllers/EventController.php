@@ -40,7 +40,7 @@ class EventController extends Controller
      */
     public function actionIndex()
     {
-        if (!Yii::$app->session->get('isAdmin')) {
+        if (Yii::$app->user->isGuest){
             $name = "Permissions";
             $message = "Vous n'êtes pas authorisé sur cette page";
             return $this->render('error', ['name' => $name, 'message' => $message]);

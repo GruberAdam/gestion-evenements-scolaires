@@ -7,6 +7,7 @@ use app\models\LocationSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Yii;
 
 /**
  * LocationController implements the CRUD actions for Location model.
@@ -38,6 +39,11 @@ class LocationController extends Controller
      */
     public function actionIndex()
     {
+        if (Yii::$app->user->isGuest){
+            $name = "Permissions";
+            $message = "Vous n'êtes pas authorisé sur cette page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
         $searchModel = new LocationSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
@@ -55,6 +61,11 @@ class LocationController extends Controller
      */
     public function actionView($locationId)
     {
+        if (Yii::$app->user->isGuest){
+            $name = "Permissions";
+            $message = "Vous n'êtes pas authorisé sur cette page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
         return $this->render('view', [
             'model' => $this->findModel($locationId),
         ]);
@@ -67,6 +78,11 @@ class LocationController extends Controller
      */
     public function actionCreate()
     {
+        if (Yii::$app->user->isGuest){
+            $name = "Permissions";
+            $message = "Vous n'êtes pas authorisé sur cette page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
         $model = new Location();
 
         if ($this->request->isPost) {
@@ -91,6 +107,11 @@ class LocationController extends Controller
      */
     public function actionUpdate($locationId)
     {
+        if (Yii::$app->user->isGuest){
+            $name = "Permissions";
+            $message = "Vous n'êtes pas authorisé sur cette page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
         $model = $this->findModel($locationId);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
@@ -111,6 +132,11 @@ class LocationController extends Controller
      */
     public function actionDelete($locationId)
     {
+        if (Yii::$app->user->isGuest){
+            $name = "Permissions";
+            $message = "Vous n'êtes pas authorisé sur cette page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
         $this->findModel($locationId)->delete();
 
         return $this->redirect(['index']);

@@ -45,7 +45,7 @@ class TimeSlotController extends Controller
      */
     public function actionIndex()
     {
-        if (!Yii::$app->session->get('isAdmin')) {
+        if (Yii::$app->user->isGuest){
             $name = "Permissions";
             $message = "Vous n'êtes pas authorisé sur cette page";
             return $this->render('error', ['name' => $name, 'message' => $message]);
@@ -67,6 +67,12 @@ class TimeSlotController extends Controller
      */
     public function actionView($timeSlotId)
     {
+        if (Yii::$app->user->isGuest){
+            $name = "Permissions";
+            $message = "Vous n'êtes pas authorisé sur cette page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
+
         return $this->render('view', [
             'model' => $this->findModel($timeSlotId),
         ]);
@@ -187,6 +193,11 @@ class TimeSlotController extends Controller
     }
 
     public function actionAddApprentice($id){
+        if (Yii::$app->user->isGuest){
+            $name = "Permissions";
+            $message = "Vous n'êtes pas authorisé sur cette page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
         $model = $this->findModel($id);
 
         if ($this->request->isPost){
@@ -213,6 +224,11 @@ class TimeSlotController extends Controller
 
     public function actionCalendar()
     {
+        if (Yii::$app->user->isGuest){
+            $name = "Permissions";
+            $message = "Vous n'êtes pas authorisé sur cette page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
         $model = new TimeSlot();
         $timeSlots = TimeSlot::find()->all();
         $events = [];
@@ -263,6 +279,11 @@ class TimeSlotController extends Controller
     }
 
     public function actionGenerateIcs($id = null){
+        if (Yii::$app->user->isGuest){
+            $name = "Permissions";
+            $message = "Vous n'êtes pas authorisé sur cette page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
         if ($id == null){
             $timeSlots = TimeSlot::find()->all();
             $this->generateIcs($timeSlots);

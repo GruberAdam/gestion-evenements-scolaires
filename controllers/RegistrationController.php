@@ -10,6 +10,7 @@ use app\models\TimeSlot;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Yii;
 
 /**
  * RegistrationController implements the CRUD actions for Registration model.
@@ -41,6 +42,11 @@ class RegistrationController extends Controller
      */
     public function actionIndex()
     {
+        if (Yii::$app->user->isGuest){
+            $name = "Permissions";
+            $message = "Vous n'êtes pas authorisé sur cette page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
         $searchModel = new RegistrationSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
@@ -58,6 +64,11 @@ class RegistrationController extends Controller
      */
     public function actionView($eventAccountId)
     {
+        if (Yii::$app->user->isGuest){
+            $name = "Permissions";
+            $message = "Vous n'êtes pas authorisé sur cette page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
         return $this->render('view', [
             'model' => $this->findModel($eventAccountId),
         ]);
@@ -70,6 +81,11 @@ class RegistrationController extends Controller
      */
     public function actionCreate()
     {
+        if (Yii::$app->user->isGuest){
+            $name = "Permissions";
+            $message = "Vous n'êtes pas authorisé sur cette page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
         $model = new Registration();
 
         if ($this->request->isPost) {
@@ -94,6 +110,11 @@ class RegistrationController extends Controller
      */
     public function actionUpdate($eventAccountId)
     {
+        if (Yii::$app->user->isGuest){
+            $name = "Permissions";
+            $message = "Vous n'êtes pas authorisé sur cette page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
         $model = $this->findModel($eventAccountId);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
@@ -114,6 +135,11 @@ class RegistrationController extends Controller
      */
     public function actionDelete($eventAccountId)
     {
+        if (Yii::$app->user->isGuest){
+            $name = "Permissions";
+            $message = "Vous n'êtes pas authorisé sur cette page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
         $this->findModel($eventAccountId)->delete();
 
         return $this->redirect(['index']);
