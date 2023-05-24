@@ -216,9 +216,11 @@ class TimeSlotController extends Controller
         $model = new TimeSlot();
         $timeSlots = TimeSlot::find()->all();
         $events = [];
+        $apprentice = null;
 
         if ($this->request->isPost) {
             $model->load($this->request->post());
+            $apprentice = $model->displayCalendarAccount;
 
             $registrations = Registration::findAll(['apprenticeId' => $model->displayCalendarAccount]);
 
@@ -255,9 +257,71 @@ class TimeSlotController extends Controller
 
         return $this->render('calendar', [
             'model' => $model,
-            'events' => $events
+            'events' => $events,
+            'apprentice' => $apprentice
         ]);
     }
+
+    public function actionGenerateIcs($id = null){
+        if ($id == null){
+            $timeSlots = TimeSlot::find()->all();
+            $this->generateIcs($timeSlots);
+        }else{
+            $timeSlots = [];
+            $registrations = Registration::findAll(['apprenticeId' => $id]);
+            foreach ($registrations as $registration){
+                array_push($timeSlots, TimeSlot::findOne(['timeSlotId' => $registration->timeSlotId]));
+            }
+            $this->generateIcs($timeSlots);
+            }
+
+        }
+
+        protected function generateIcs($timeSlots){
+            $eol = "\r\n";
+            $search = array ('/"/',
+                '/,/',
+                '/\n/',
+                '/\r/',
+                '/;/',
+                '/\\//');
+            $replace = array ('\"',
+                '\\,',
+                '\\n',
+                '',
+                '\\;',
+                '\\\\');
+
+            $data = "BEGIN:VCALENDAR".$eol.
+                "VERSION:2.0".$eol.
+                "PRODID:-//project/author//NONSGML v1.0//EN".$eol.
+                "CALSCALE:GREGORIAN".$eol.
+                "METHOD:PUBLISH".$eol;
+
+            foreach($timeSlots as $timeSlot){
+                $data .= "BEGIN:VEVENT".$eol;
+                $data .= "DTSTART;VALUE=DATE-TIME:".date("Ymd\THis\Z",strtotime(str_replace("00:00:00", "",$timeSlot->date)." ".  $timeSlot->startTime)).$eol;
+                $data .= "DTEND;VALUE=DATE-TIME:".date("Ymd\THis\Z",strtotime(str_replace("00:00:00", "",$timeSlot->date)." ".  $timeSlot->endTime)).$eol;
+
+                $data .= "UID:" . Yii::$app->security->generateRandomString() .$eol;
+                $data .= "SEQUENCE:1.0".$eol;
+                $data .= "LOCATION:".$timeSlot->event->location->title.$eol;
+                $data .= "DTSTAMP:".date("Ymd\THis\Z").$eol;
+                $data .= "SUMMARY:".preg_replace($search, $replace, $timeSlot->event->title).$eol;
+                $data .= "DESCRIPTION:".preg_replace($search, $replace, $timeSlot->event->title).$eol;
+                $data .= "X-ALT-DESC;FMTTYPE=text/html:<!DOCTYPE HTML><HTML><BODY>"."test"."</BODY></HTML>".$eol;
+                if(!empty($event["with"])) foreach($event["with"] as $with){
+                    $data .= "ATTENDEE:MAILTO:".$with.$eol;
+                }
+                //$data .= "URL:".$event["url"].$eol;
+                $data .= "TRANSP:OPAQUE".$eol;
+                $data .= "END:VEVENT".$eol;
+            }
+            $data .= "END:VCALENDAR";
+
+            file_put_contents('calendrier.ics', $data);
+            Yii::$app->response->sendFile('calendrier.ics');
+        }
 
     /**
      * Finds the TimeSlot model based on its primary key value.

@@ -30,12 +30,14 @@ echo $form->field($model, 'displayCalendarAccount')->widget(Select2::class, [
 
 <?= Html::submitButton('Chercher', ['class' => 'btn btn-primary', 'name' => 'confirm-button']) ?>
 
+<?= Html::a('Genérer ICS', ['generate-ics', 'id' => $apprentice], ['class' => 'btn btn-primary']) ?>
+
 <?php ActiveForm::end(); ?>
-<br><br>
+<br>
 <?= \yii2fullcalendar\yii2fullcalendar::widget(array(
     'events'=> $events,
     'themeSystem' => "",
-    'contentHeight' => 700,
+    'contentHeight' => 550,
     'options' => [
         'lang' => 'fr',
     ]
